@@ -71,7 +71,7 @@ jobs:
             asset_path: ./public/bundle.css
             asset_name: cipan.css
             asset_content_type: text/css
-            - name: Push to release branch
+        - name: Push to release branch
           run: |
             git config --local user.email "$(git show -s --format='%ae' HEAD)"
             git config --local user.name "$(git show -s --format='%an' HEAD)"
