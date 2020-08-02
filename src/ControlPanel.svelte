@@ -1,4 +1,5 @@
 <script>
+	import { onMount, onDestroy } from 'svelte';
 	import { quintOut } from 'svelte/easing';
 	import { slide, fade } from 'svelte/transition';
 	import { POSITION, config } from './store.js';
@@ -6,6 +7,35 @@
 
 	const handleToggle = () => {
 	  $config.isShowing = !$config.isShowing;
+	};
+
+	const getAutoHide = () =>
+	  setTimeout(() => {
+	    if (isMounted) {
+	      $config.isShowing = false;
+	    }
+	  }, 2000);
+
+	let autoHide;
+	let isMounted;
+
+	onMount(() => {
+	  isMounted = true;
+	  autoHide = getAutoHide();
+	});
+
+	onDestroy(() => {
+	  autoHide && clearTimeout(autoHide);
+	  isMounted = false;
+	});
+
+	const handleMouseOver = () => {
+	  autoHide && clearTimeout(autoHide);
+	  $config.isShowing = true;
+	};
+
+	const handleMouseOut = () => {
+	  autoHide = getAutoHide();
 	};
 </script>
 
@@ -15,6 +45,8 @@ class:fixed-top-right={$config.position === POSITION.TOP_RIGHT}
 class:fixed-top-left={$config.position === POSITION.TOP_LEFT}
 class:fixed-bottom-right={$config.position === POSITION.BOTTOM_RIGHT}
 class:fixed-bottom-left={$config.position === POSITION.BOTTOM_LEFT}
+on:mouseover={handleMouseOver}
+on:mouseout={handleMouseOut}
 >
 	<div on:click={handleToggle} class="header text-base clearfix">
 		<div class="left">{'Panel'}</div>
