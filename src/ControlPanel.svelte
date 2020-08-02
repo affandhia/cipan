@@ -14,7 +14,7 @@
 	    if (isMounted) {
 	      $config.isShowing = false;
 	    }
-	  }, 2000);
+	  }, 1000);
 
 	let autoHide;
 	let isMounted;
@@ -35,7 +35,7 @@
 	};
 
 	const handleMouseOut = () => {
-	  autoHide = getAutoHide();
+	  if ($config.isShowing) autoHide = getAutoHide();
 	};
 </script>
 
