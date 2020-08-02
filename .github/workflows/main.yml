@@ -11,6 +11,12 @@ jobs:
       - uses: actions/checkout@master
         with:
           fetch-depth: '0'
+      - name: Get commit message
+        id: commit_message
+        run: |
+          echo ::set-output name=commit_message::$(git log --format=%B -n 1 HEAD)
+          echo ::set-output name=is_draft::$( if [[ "$(git log --format=%B -n 1 HEAD)" == *"#draft"* ]]; then echo "true"; else echo "false"; fi )
+          echo ::set-output name=release_branch::$( if [[ "$(git log --format=%B -n 1 HEAD)" == *"#release"* ]]; then echo "master"; else echo "not releasing"; fi )
       - name: Bump version and push tag
         id: version
         uses: anothrNick/github-tag-action@1.22.0
@@ -18,21 +24,28 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
           DEFAULT_BUMP: none
+          RELEASE_BRANCHES: ${{ steps.commit_message.outputs.commit_message }}
       - name: List Outpus
         run: |
           echo "new_tag: ${{ steps.version.outputs.new_tag }}"
           echo "tag: ${{ steps.version.outputs.tag }}"
           echo "part: ${{ steps.version.outputs.part }}"
-          echo "should_release: ${{ steps.version.outputs.new_tag == steps.version.outputs.tag }}"
+          echo "should_release: ${{ !contains(steps.version.outputs.new_tag, 'none') && steps.version.outputs.new_tag == steps.version.outputs.tag }}"
+          echo "is_prelease: ${{ contains(steps.version.outputs.new_tag, '-') }}"
+          echo "is_draft: ${{ steps.commit_message.outputs.is_draft }}"
+          echo "commit_message: ${{ steps.commit_message.outputs.commit_message }}"
     outputs:
       new_tag: ${{ steps.version.outputs.new_tag }}
       tag: ${{ steps.version.outputs.tag }}
       part: ${{ steps.version.outputs.part }}
-      should_release: ${{ steps.version.outputs.new_tag == steps.version.outputs.tag }}
+      should_release: ${{ !contains(steps.version.outputs.new_tag, 'none') && steps.version.outputs.new_tag == steps.version.outputs.tag }}
+      is_prelease: ${{ contains(steps.version.outputs.new_tag, '-') }}
+      is_draft: ${{ steps.commit_message.outputs.is_draft }}
+      commit_message: ${{ steps.commit_message.outputs.commit_message }}
   job_push_release:
     name: Release Binary
     needs: job_check_version
-    if: ${{ needs.job_check_version.outputs.should_release  }}
+    if: needs.job_check_version.outputs.should_release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -53,8 +66,8 @@ jobs:
         with:
           tag_name: ${{ needs.job_check_version.outputs.new_tag }}
           release_name: Release ${{ needs.job_check_version.outputs.new_tag }}
-          draft: false
-          prerelease: ${{ endsWith( needs.job_check_version.outputs.new_tag, '-alpha' ) || endsWith( needs.job_check_version.outputs.new_tag, '-beta' ) }}
+          draft: ${{ needs.job_check_version.outputs.is_draft }}
+          prerelease: ${{ needs.job_check_version.outputs.is_prerelease }}
       - name: Upload Release Javascript
         id: upload-release-javascript
         uses: actions/upload-release-asset@v1
