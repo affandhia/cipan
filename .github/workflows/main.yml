@@ -18,6 +18,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WITH_V: true
           DEFAULT_BUMP: none
+      - name: List Outpus
+        run: |
+          echo "new_tag: ${{ steps.version.outputs.new_tag }}"
+          echo "tag: ${{ steps.version.outputs.tag }}"
+          echo "part: ${{ steps.version.outputs.part }}"
+          echo "should_release: ${{ steps.version.outputs.new_tag == steps.version.outputs.tag }}"
     outputs:
       new_tag: ${{ steps.version.outputs.new_tag }}
       tag: ${{ steps.version.outputs.tag }}
