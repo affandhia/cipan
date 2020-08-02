@@ -5,7 +5,7 @@ on:
       - master
 jobs:
   job_check_version:
-    name: Check Bump Version
+    name: Check Version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -17,7 +17,7 @@ jobs:
           echo ::set-output name=commit_message::$(git log --format=%B -n 1 HEAD)
           echo ::set-output name=is_draft::$( if [[ "$(git log --format=%B -n 1 HEAD)" == *"#draft"* ]]; then echo "true"; else echo "false"; fi )
           echo ::set-output name=release_branch::$( if [[ "$(git log --format=%B -n 1 HEAD)" == *"#release"* ]]; then echo "master"; else echo "not releasing"; fi )
-      - name: Bump version and push tag
+      - name: Push Tag Version
         id: version
         uses: anothrNick/github-tag-action@1.22.0
         env:
