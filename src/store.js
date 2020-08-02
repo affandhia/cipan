@@ -17,22 +17,9 @@ const defaultConfig = {
   isShowing: true,
   controls: [
     {
-      type: CONTROL_TYPE.CHECKBOX,
-      label: 'Demo',
-      onChange: (value, { index, state, dispatcher }) => {
-        dispatcher.update((n) => ({
-          ...n,
-          controls: state.controls.map((control, i) =>
-            i === index ? { ...control, value } : control
-          ),
-        }));
-      },
-      value: true,
-    },
-    {
       type: CONTROL_TYPE.DROPDOWN,
       label: 'Position',
-      onChange: (value, { index, dispatcher }) => {
+      onChange: (value, { dispatcher }) => {
         dispatcher.update((n) => ({
           ...n,
           position: value,
