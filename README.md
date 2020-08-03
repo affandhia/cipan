@@ -34,6 +34,16 @@ Navigate to [localhost:5000](http://localhost:5000). You should see your app run
 
 ## Deploying to the web
 
+### Serve in your web
+
+You can use https://www.jsdelivr.com/
+
+![JS](https://cdn.jsdelivr.net/www.jsdelivr.com/a94a179199252a821cd6f5c2b02f91392c24afb6/img/logo-horizontal.svg)
+
+Release [STABLE]: `https://cdn.jsdelivr.net/gh/affandhia/cipan@release/public/bundle.js`
+
+Pre-release [UNSTABLE]: `https://cdn.jsdelivr.net/gh/affandhia/cipan@pre-release/public/bundle.js`
+
 ### With [now](https://zeit.co/now)
 
 Install `now` if you haven't already:
