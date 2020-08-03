@@ -1,11 +1,11 @@
 <script>
-	import ControlPanel from "./ControlPanel.svelte";
-	import ShortcutsController from "./ShortcutsController.svelte";
-	import SDK from "./SDK.svelte";
+	import ControlPanel from './ControlPanel.svelte';
+	import ShortcutsController from './ShortcutsController.svelte';
+	import SDK from './SDK.svelte';
 </script>
 
 <style>
-	:global(:root) {
+	div :global(:root) {
 	  --uiLightPrimary: #fff;
 	  --uiLightSecondary: #eeeeee;
 	  --uiLightStain: #f9f9f9;
@@ -24,44 +24,46 @@
 	  --font-size-6xl: 4rem; /* 64px */
 	}
 
-	:global(.text-xs) {
+	div :global(.text-xs) {
 	  font-size: var(--font-size-xs);
 	}
-	:global(.text-sm) {
+	div :global(.text-sm) {
 	  font-size: var(--font-size-sm);
 	}
-	:global(.text-base) {
+	div :global(.text-base) {
 	  font-size: var(--font-size-base);
 	}
-	:global(.text-lg) {
+	div :global(.text-lg) {
 	  font-size: var(--font-size-lg);
 	}
-	:global(.text-xl) {
+	div :global(.text-xl) {
 	  font-size: var(--font-size-xl);
 	}
-	:global(.text-2xl) {
+	div :global(.text-2xl) {
 	  font-size: var(--font-size-2xl);
 	}
-	:global(.text-3xl) {
+	div :global(.text-3xl) {
 	  font-size: var(--font-size-3xl);
 	}
-	:global(.text-4xl) {
+	div :global(.text-4xl) {
 	  font-size: var(--font-size-4xl);
 	}
-	:global(.text-5xl) {
+	div :global(.text-5xl) {
 	  font-size: var(--font-size-5xl);
 	}
-	:global(.text-6xl) {
+	div :global(.text-6xl) {
 	  font-size: var(--font-size-6xl);
 	}
 
-	:global(.clearfix::after) {
-	  content: "";
+	div :global(.clearfix::after) {
+	  content: '';
 	  clear: both;
 	  display: table;
 	}
 </style>
 
-<ControlPanel />
-<ShortcutsController />
-<SDK />
+<div>
+	<ControlPanel />
+	<ShortcutsController />
+	<SDK />
+</div>
