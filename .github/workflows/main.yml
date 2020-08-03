@@ -45,7 +45,7 @@ jobs:
   job_push_release:
     name: Release Binary
     needs: job_check_version
-    if: needs.job_check_version.outputs.should_release
+    if: ${{ needs.job_check_version.outputs.should_release }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
