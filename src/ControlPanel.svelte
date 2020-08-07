@@ -4,9 +4,18 @@
 	import { slide, fade } from 'svelte/transition';
 	import { POSITION, config } from './store.js';
 	import Controls from './Controls.svelte';
+	let autoHide;
+	let isMounted;
+	let isHeld;
 
 	const handleToggle = () => {
 	  $config.isShowing = !$config.isShowing;
+	  if (!$config.isShowing) {
+	    isHeld = setTimeout(() => {
+	      clearTimeout(isHeld);
+	      isHeld = undefined;
+	    }, 2000);
+	  }
 	};
 
 	const getAutoHide = () =>
@@ -16,9 +25,6 @@
 	    }
 	  }, 1000);
 
-	let autoHide;
-	let isMounted;
-
 	onMount(() => {
 	  isMounted = true;
 	  autoHide = getAutoHide();
@@ -26,12 +32,14 @@
 
 	onDestroy(() => {
 	  autoHide && clearTimeout(autoHide);
+	  autoHide = undefined;
 	  isMounted = false;
 	});
 
 	const handleMouseOver = () => {
 	  autoHide && clearTimeout(autoHide);
-	  $config.isShowing = true;
+	  autoHide = undefined;
+	  if (!isHeld) $config.isShowing = true;
 	};
 
 	const handleMouseOut = () => {
